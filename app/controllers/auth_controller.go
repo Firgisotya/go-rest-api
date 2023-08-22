@@ -2,17 +2,13 @@ package controllers
 
 import (
 	"net/http"
-	"time"
 
+	"github.com/Firgisotya/go-rest-api/app/middlewares"
 	"github.com/Firgisotya/go-rest-api/app/models"
 	"github.com/Firgisotya/go-rest-api/config"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/dgrijalva/jwt-go"
 )
-
-var currentUser models.User // Simpan pengguna yang sedang login
-
 
 
 func Register(c *gin.Context) {
@@ -27,7 +23,15 @@ func Register(c *gin.Context) {
 
 	user.Password = string(hashedPassword)
 
-	db := config.GetDB()
+	db := config.DB
+
+	// cek duplikasi user
+	var existUser models.User
+	if err := config.DB.Where("username = ?", user.Username).First(&existUser).Error; err == nil {
+		c.JSON(http.StatusConflict, gin.H{"message": "Username already exist"})
+		return
+	}
+	
 	result := db.Create(&user)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error creating user"})
@@ -42,33 +46,40 @@ func Login(c *gin.Context) {
 	c.ShouldBindJSON(&inputUser)
 
 	var dbUser models.User
-	db := config.GetDB()
+	db := config.DB
+
+	//cek apakah username ada di database 
 	result := db.Where("username = ?", inputUser.Username).First(&dbUser)
 	if result.Error != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid username"})
 		return
 	}
 
+	// cek password
 	err := bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(inputUser.Password))
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid password"})
 		return
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": dbUser.Username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
-		"user_id":  dbUser.ID,
-	})
-
-	tokenString, err := token.SignedString([]byte(config.GetEnv("JWT_SECRET")))
+	// fungsi berhasil login
+	token, err := middlewares.GenerateToken(dbUser.ID, dbUser.Username)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Internal server error"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Error creating token"})
 		return
 	}
 
-	currentUser = dbUser
+	// tampilkan data hasil login
+	c.JSON(http.StatusOK, gin.H{
+		"Token-type": "Bearer",
+		"Token": token,
+		"User": dbUser,
+	})
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenString, "username": dbUser.Username})
+	
 }
 
+func Logout(c *gin.Context){
+	c.Header("Authorization", "")
+	c.JSON(http.StatusOK, gin.H{"message": "Logout success"})
+}

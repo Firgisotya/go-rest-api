@@ -13,7 +13,7 @@ func CreateTodo(c *gin.Context) {
 	var todo models.Todo
 	c.ShouldBindJSON(&todo)
 
-	db := config.GetDB()
+	db := config.DB
 	result := db.Create(&todo)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error creating todo"})
@@ -27,7 +27,7 @@ func GetTodos(c *gin.Context) {
 	userID, _ := c.Get("user_id")
 
 	var todos []models.Todo
-	db := config.GetDB()
+	db := config.DB
 	db.Where("user_id = ?", userID).Find(&todos)
 
 	c.JSON(http.StatusOK, todos)
@@ -37,7 +37,7 @@ func UpdateTodo(c *gin.Context) {
 	todoID := c.Param("id")
 
 	var todo models.Todo
-	db := config.GetDB()
+	db := config.DB
 	result := db.Where("id = ?", todoID).First(&todo)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Todo not found"})
@@ -56,7 +56,7 @@ func DeleteTodo(c *gin.Context) {
 	todoID := c.Param("id")
 
 	var todo models.Todo
-	db := config.GetDB()
+	db := config.DB
 	result := db.Where("id = ?", todoID).Delete(&todo)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Todo not found"})

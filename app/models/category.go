@@ -4,12 +4,9 @@ import (
 	"time"
 )
 
-type User struct {
+type Category struct {
 	ID        uint           `gorm:"primaryKey"`
-	Username string
-	Email string
-	Password string
+	Name string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
-

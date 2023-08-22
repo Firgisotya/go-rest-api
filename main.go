@@ -1,24 +1,19 @@
 package main
 
 import (
-	"github.com/Firgisotya/go-rest-api/app/models"
-	"github.com/Firgisotya/go-rest-api/app/routes"
+	"os"
 	"github.com/Firgisotya/go-rest-api/config"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"github.com/Firgisotya/go-rest-api/config/command"
 )
 
 func main() {
-	config.LoadEnv()
-	db, err := gorm.Open(mysql.Open(config.GetDatabaseURL()), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
+	functionRun := os.Args[1]
+
+	switch functionRun {
+	case "db:migrate":
+		command.Migrate()
+	case "db:seed":
+		command.Seed(config.DB)
 	}
 
-	config.SetDB(db)
-
-	db.AutoMigrate(&models.User{}, &models.Todo{})
-	
-	r := routes.SetupRouter()
-	r.Run() // Menjalankan server pada port 8080
 }
