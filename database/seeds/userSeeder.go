@@ -1,19 +1,22 @@
 package seeds
 
 import (
-
 	"github.com/Firgisotya/go-rest-api/app/models"
+	"github.com/Firgisotya/go-rest-api/config"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
+type seedUsers struct{}
 
+func (s seedUsers) Run() error {
 
-func seedUsers(db *gorm.DB) error {
+	db := config.DB
+
 	// Seed users
 	users := []models.User{
-		{Username: "user1", Password: "password1"},
-		{Username: "user2", Password: "password2"},
+		{ID: uuid.New().String(), Username: "user1", Password: "password1"},
+		{ID: uuid.New().String(), Username: "user2", Password: "password2"},
 	}
 
 	for _, user := range users {

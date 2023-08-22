@@ -2,11 +2,11 @@ package command
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/Firgisotya/go-rest-api/app"
 	"github.com/Firgisotya/go-rest-api/config"
 	"github.com/Firgisotya/go-rest-api/database/seeds"
-	"gorm.io/gorm"
 )
 
 func Migrate() {
@@ -15,7 +15,15 @@ func Migrate() {
 	config.ConnectDB()
 
 	for _, model := range app.RegisterModel(){
-		err := config.DB.AutoMigrate(model.Model)
+		// Drop Tabel yang sudah ada
+		err := config.DB.Migrator().DropTable(model.Model)
+		if err != nil {
+			fmt.Printf("Failed to drop table for model %T: %v\n", model.Model, err)
+		}
+
+
+		// migrasi model baru
+		err = config.DB.AutoMigrate(model.Model)
 
 		if err != nil {
 			panic("Failed to migrate database")
@@ -25,14 +33,15 @@ func Migrate() {
 	fmt.Println("Migration completed")
 }
 
-func Seed(db *gorm.DB) error{
-	fmt.Println("Running seed...")
-	for _, seeder := range seeds.RegisterSeed(db){
-		err := db.Debug().Create(seeder.Seeder).Error
+func Seed(){
 
-		if err != nil {
-			return err
-		}
+	config.ConnectDB()
+
+	fmt.Println("Running seed...")
+	
+	if err := seeds.DBSeed(); err != nil {
+		log.Fatal("Failed to seed: %v", err)
 	}
-	return nil
+
+	fmt.Println("Seed completed!")
 }

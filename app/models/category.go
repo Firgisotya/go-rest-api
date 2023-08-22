@@ -5,7 +5,7 @@ import (
 )
 
 type Category struct {
-	ID        uint           `gorm:"primaryKey"`
+	ID        string          `gorm:"size:36;not null;unique;primary_key;" json:"id"`
 	Name string
 	CreatedAt time.Time
 	UpdatedAt time.Time

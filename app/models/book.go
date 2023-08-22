@@ -5,8 +5,9 @@ import (
 )
 
 type Books struct {
-	ID        uint           `gorm:"primaryKey"`
-	CategoryID uint
+	ID        string    `gorm:"size:36;not null;unique;primary_key;" json:"id"`
+	Category  Category
+	CategoryID string   `gorm:"size:36;index;fieldNullable", json:"category_id"`
 	Title     string
 	Author     string
 	Year      string

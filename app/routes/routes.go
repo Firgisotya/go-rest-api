@@ -17,14 +17,10 @@ func SetupRouter() *gin.Engine {
 		auth.POST("/login", controllers.Login)
 	}
 
-	todo := router.Group("/todo")
+	category := router.Group("/category")
 	{
-		todo.Use(middlewares.JWTMiddleware())
-		todo.POST("/", controllers.CreateTodo)
-		todo.GET("/", controllers.GetTodos)
-		todo.PUT("/:id", controllers.UpdateTodo)
-		todo.DELETE("/:id", controllers.DeleteTodo)
-		
+		category.Use(middlewares.JWTMiddleware())
+		category.GET("/", controllers.GetAllCategory)
 	}
 	}
 

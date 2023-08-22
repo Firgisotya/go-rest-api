@@ -2,23 +2,21 @@ package seeds
 
 import (
 	"github.com/Firgisotya/go-rest-api/app/models"
-	"gorm.io/gorm"
+	"github.com/Firgisotya/go-rest-api/config"
+	"github.com/google/uuid"
 )
 
+type seedBooks struct{}
+
 // seedBook
-func seedBooks(db *gorm.DB) error {
+func (s seedBooks) Run() error {
+
+	db := config.DB
 
 
 	books := []models.Books{
-		{Title: "The Lord of the Rings", Author: "J.R.R. Tolkien", CategoryID: 4, Year: "2022"},
-		{Title: "The Hobbit", Author: "J.R.R. Tolkien", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Philosopher's Stone", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Chamber of Secrets", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Prisoner of Azkaban", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Goblet of Fire", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Order of the Phoenix", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Half-Blood Prince", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
-		{Title: "Harry Potter and the Deathly Hallows", Author: "J.K. Rowling", CategoryID: 4, Year: "2022"},
+		{ID: uuid.New().String(), Title: "The Lord of The Rings", Author: "J.R.R Tolkien", CategoryID: "", Year: "1945"},
+		{ID: uuid.New().String(), Title: "The Hobbit", Author: "J.R.R Tolkien", CategoryID: "", Year: "1945"},
 	}
 
 	for _, book := range books {
