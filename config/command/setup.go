@@ -40,7 +40,7 @@ func Seed(){
 	fmt.Println("Running seed...")
 	
 	if err := seeds.DBSeed(); err != nil {
-		log.Fatal("Failed to seed: %v", err)
+		log.Printf("Failed to seed: %v", err)
 	}
 
 	fmt.Println("Seed completed!")

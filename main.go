@@ -5,10 +5,12 @@ import (
 	"log"
 	"os"
 
-	"github.com/Firgisotya/go-rest-api/app/middlewares"
+	// "github.com/Firgisotya/go-rest-api/app/middlewares"
+	// "github.com/Firgisotya/go-rest-api/app/middlewares"
 	"github.com/Firgisotya/go-rest-api/app/routes"
 	"github.com/Firgisotya/go-rest-api/config"
 	"github.com/Firgisotya/go-rest-api/config/command"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -32,6 +34,7 @@ func main() {
 		if key := os.Getenv("JWT_SECRET"); key == "" {
 			fmt.Println("Your key is null, please run `go run main.go key:generate`")
 		} else {
+			
 			fmt.Println("Starting Go API Server...")
 
 			// Baca variabel lingkungan dari file .env
@@ -55,15 +58,17 @@ func main() {
 			router := gin.New()
 
 			// Untuk CORS
-			router.Use(middlewares.CorsMIddleware())
+			// router.Use(middlewares.CorsMiddleware())
+			router.Use(cors.Default())
 
 			// Setup rute untuk pengguna (user) dan produk (product)
-			routes.SetupRouter()
+			routes.SetupRouter(router)
 
 			// Jalankan server
 			router.Run(":9000")
 		}
 
 	}
+	
 
 }
