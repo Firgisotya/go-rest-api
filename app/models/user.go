@@ -5,10 +5,11 @@ import (
 )
 
 type User struct {
-	ID        string      `gorm:"size:36;not null;unique;primary_key;" json:"id"`
+	ID       uint `gorm:"primary_key:auto_increment" json:"id"`
 	Username string
 	Email string
 	Password string
+	Role     int
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

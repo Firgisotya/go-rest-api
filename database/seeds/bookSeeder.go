@@ -3,7 +3,6 @@ package seeds
 import (
 	"github.com/Firgisotya/go-rest-api/app/models"
 	"github.com/Firgisotya/go-rest-api/config"
-	"github.com/google/uuid"
 )
 
 type seedBooks struct{}
@@ -15,8 +14,8 @@ func (s seedBooks) Run() error {
 
 
 	books := []models.Books{
-		{ID: uuid.New().String(), Title: "The Lord of The Rings", Author: "J.R.R Tolkien", CategoryID: "", Year: "1945"},
-		{ID: uuid.New().String(), Title: "The Hobbit", Author: "J.R.R Tolkien", CategoryID: "", Year: "1945"},
+		{Title: "The Lord of The Rings", Author: "J.R.R Tolkien", CategoryID: 1, Year: "1945"},
+		{Title: "The Hobbit", Author: "J.R.R Tolkien", CategoryID: 2, Year: "1945"},
 	}
 
 	for _, book := range books {

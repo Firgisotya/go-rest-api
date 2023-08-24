@@ -9,11 +9,10 @@ import (
 	"github.com/Firgisotya/go-rest-api/config"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 )
 
 type inputBook struct {
-	CategoryID string `json:"category_id" binding:"required"`
+	CategoryID uint   `json:"category_id" binding:"required"`
 	Title      string `json:"title" binding:"required"`
 	Author     string `json:"author" binding:"required"`
 	Year       string `json:"year" binding:"required"`
@@ -73,7 +72,6 @@ func CreateBook(c *gin.Context) {
 
 
 	var book models.Books
-	book.ID = uuid.New().String()
 	book.CategoryID = inputBook.CategoryID
 	book.Title = inputBook.Title
 	book.Author = inputBook.Author

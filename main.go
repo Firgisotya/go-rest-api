@@ -5,12 +5,10 @@ import (
 	"log"
 	"os"
 
-	// "github.com/Firgisotya/go-rest-api/app/middlewares"
-	// "github.com/Firgisotya/go-rest-api/app/middlewares"
+	"github.com/Firgisotya/go-rest-api/app/middlewares"
 	"github.com/Firgisotya/go-rest-api/app/routes"
 	"github.com/Firgisotya/go-rest-api/config"
 	"github.com/Firgisotya/go-rest-api/config/command"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -58,8 +56,8 @@ func main() {
 			router := gin.New()
 
 			// Untuk CORS
-			// router.Use(middlewares.CorsMiddleware())
-			router.Use(cors.Default())
+			router.Use(middlewares.CorsMiddleware())
+			// router.Use(cors.Default())
 
 			// Setup rute untuk pengguna (user) dan produk (product)
 			routes.SetupRouter(router)

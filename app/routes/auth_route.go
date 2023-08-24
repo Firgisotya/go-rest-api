@@ -7,12 +7,12 @@ import (
 )
 
 func AuthRoute(router *gin.Engine) {
-	auth := router.Group("/api/auth")
+	auth := router.Group("/api/auth/")
 	{
-			auth.POST("/register", controllers.Register)
-			auth.POST("/login", controllers.Login)
+			auth.POST("register", controllers.Register)
+			auth.POST("login", controllers.Login)
 			auth.Use(middlewares.JWTMiddleware())
-			auth.POST("/logout", controllers.Logout)
+			auth.POST("logout", controllers.Logout)
 		
 	}
 }

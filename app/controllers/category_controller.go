@@ -7,7 +7,6 @@ import (
 	"github.com/Firgisotya/go-rest-api/config"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 )
 
 type inputCategory struct {
@@ -44,7 +43,6 @@ func CreateCategory(c *gin.Context) {
 	}
 
 	var category models.Category
-	category.ID = uuid.New().String()
 	category.Name = inputCategory.Name
 
 	db := config.DB
@@ -60,9 +58,10 @@ func CreateCategory(c *gin.Context) {
 func UpdateCategory(c *gin.Context) {
 	var category models.Category
 	db := config.DB
-	result := db.First(&category, c.Param("id"))
+	id := c.Param("id")
+	result := db.First(&category, id)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error fetching category"})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error fetching category", "error": result.Error})
 		return
 	}
 
@@ -91,7 +90,8 @@ func UpdateCategory(c *gin.Context) {
 func DeleteCategory(c *gin.Context) {
 	var category models.Category
 	db := config.DB
-	result := db.First(&category, c.Param("id"))
+	id := c.Param("id")
+	result := db.First(&category, id)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error fetching category"})
 		return

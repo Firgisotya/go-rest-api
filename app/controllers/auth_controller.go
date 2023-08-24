@@ -25,12 +25,20 @@ func Register(c *gin.Context) {
 
 	db := config.DB
 
-	// cek duplikasi user
 	var existUser models.User
+
+	// cek duplikasi email
+	if err := config.DB.Where("email = ?", user.Email).First(&existUser).Error; err == nil {
+		c.JSON(http.StatusConflict, gin.H{"message": "Email already exist"})
+		return
+	}
+		// cek duplikasi username
 	if err := config.DB.Where("username = ?", user.Username).First(&existUser).Error; err == nil {
 		c.JSON(http.StatusConflict, gin.H{"message": "Username already exist"})
 		return
 	}
+
+	
 	
 	result := db.Create(&user)
 	if result.Error != nil {

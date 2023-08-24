@@ -3,7 +3,6 @@ package seeds
 import (
 	"github.com/Firgisotya/go-rest-api/app/models"
 	"github.com/Firgisotya/go-rest-api/config"
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -15,8 +14,8 @@ func (s seedUsers) Run() error {
 
 	// Seed users
 	users := []models.User{
-		{ID: uuid.New().String(), Username: "user1", Password: "password1"},
-		{ID: uuid.New().String(), Username: "user2", Password: "password2"},
+		{Username: "admin", Email: "admin@gmail.com", Password: "password", Role: 1},
+		{Username: "user", Email: "user@gmail.com", Password: "password", Role: 2},
 	}
 
 	for _, user := range users {
