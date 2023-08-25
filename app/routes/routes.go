@@ -6,6 +6,7 @@ import (
 
 func SetupRouter(router *gin.Engine) {	
 	AuthRoute(router)
+	UserRoute(router)
 	CategoryRoute(router)
 	BooksRoute(router)
 }

@@ -12,6 +12,7 @@ func CategoryRoute(router *gin.Engine) {
 		// category.Use(middlewares.JWTMiddleware())
 		category.GET("", controllers.GetAllCategory)
 		category.POST("", controllers.CreateCategory)
+		category.GET(":id", controllers.ShowCategory)
 		category.PUT(":id", controllers.UpdateCategory)
 		category.DELETE(":id", controllers.DeleteCategory)
 	}

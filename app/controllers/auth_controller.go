@@ -23,7 +23,7 @@ func Register(c *gin.Context) {
 
 	user.Password = string(hashedPassword)
 
-	db := config.DB
+	db := config.DB	
 
 	var existUser models.User
 

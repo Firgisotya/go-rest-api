@@ -55,6 +55,19 @@ func CreateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, category)
 }
 
+func ShowCategory(c *gin.Context) {
+	var category models.Category
+	db := config.DB
+	id := c.Param("id")
+	result := db.First(&category, id)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Error fetching category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, category)
+}
+
 func UpdateCategory(c *gin.Context) {
 	var category models.Category
 	db := config.DB
